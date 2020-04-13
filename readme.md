@@ -30,15 +30,11 @@
 
 #### 房产投资：
 
-$$
-houseTotalReward = houseValue*(1.0 + housePriceRate)^{yearTerm}
-$$
+![](./image/houseValue.png)
 
 #### 股票理财投资：
 
-$$
-\begin{align*}investmentTotalReward = cash*(1.0+earningRate)^{yearTerm}+\\monthlyPayment*(1.0+earningRate)^{yearTerm-1} + \\ monthlyPayment*(1.0+earningRate)^{yearTerm-2}+\\monthlyPayment*(1.0+earningRate)^{yearTerm-3}+...+ monthlyPayment\\\end{align*}
-$$
+![](./image/stockValue.png)
 
 
 
