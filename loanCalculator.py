@@ -1,6 +1,6 @@
 # coding: utf-8
 import math
-import numpy as np
+import numpy_financial as npf
 from abc import abstractmethod
 
 
@@ -9,6 +9,7 @@ class LoanCalculator:
         self.loanAmount = loanAmount
         self.loanTerm = loanMonthlyTerm
         self.monthlyInterestRate = interestRate * 1.0 / 12
+        self.totalInterestRate = interestRate
 
     @property
     @abstractmethod
@@ -111,21 +112,53 @@ class MatchingThePrincipalRepayment(LoanCalculator):
         print('Total Repayment: {}'.format(self.totalRepayment))
 
 
+class PayInterestFirst(LoanCalculator):
+    @property
+    def monthlyRepayment(self):
+        res = ([self.monthlyInterest]*(self.loanTerm-1))
+        res.extend([self.monthlyInterest+self.loanAmount])
+        return res
+
+    @property
+    def monthlyInterest(self):
+        return self.totalInterest/self.loanTerm
+
+    @property
+    def totalInterest(self):
+        return self.loanAmount*self.totalInterestRate
+
+
 if __name__ == '__main__':
     loan = 100000
     term = 12
-    rate = 0.057
+    rate = 0.0576
 
     calA = MatchingTheRepaymentOfPrincipalAndInterest(loan, term, rate)
     # calA.showDetail()
     print(calA.monthlyInterest)
     print(calA.monthlyPrincipal)
     print(calA.monthlyRepayment)
+    cashFlow = [calA.monthlyRepayment]*12
+    cashFlow.insert(0, -loan*1.)
+    print(cashFlow)
+    irr = round(npf.irr(cashFlow), 15)
+    print(irr)
 
-    print('-----')
+    # print('-----')
 
     calB = MatchingThePrincipalRepayment(loan, term, rate)
     # calB.showDetail()
-    print(calB.monthlyInterest)
-    print(calB.monthlyPrincipal)
-    print(calB.monthlyRepayment)
+    # print(calB.monthlyInterest)
+    # print(calB.monthlyPrincipal)
+    cashFlow = calB.monthlyRepayment
+    cashFlow.insert(0, -loan*1.)
+    print(cashFlow)
+    irr = round(npf.irr(cashFlow), 15)
+    print(irr)
+
+    calC = PayInterestFirst(loan, term, rate)
+    print(calC.monthlyRepayment)
+    cashFlow = calC.monthlyRepayment
+    cashFlow.insert(0, -loan*1.)
+    irr = round(npf.irr(cashFlow), 15)
+    print(irr)
