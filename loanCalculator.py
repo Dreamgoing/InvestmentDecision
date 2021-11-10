@@ -1,5 +1,6 @@
 # coding: utf-8
 import math
+import numpy as np
 from abc import abstractmethod
 
 
@@ -49,8 +50,8 @@ class MatchingTheRepaymentOfPrincipalAndInterest(LoanCalculator):
     @property
     def monthlyRepayment(self):
         return self.loanAmount * self.monthlyInterestRate * \
-               math.pow(1.0 + self.monthlyInterestRate, self.loanTerm) / \
-               (math.pow(1.0 + self.monthlyInterestRate, self.loanTerm) - 1)
+            math.pow(1.0 + self.monthlyInterestRate, self.loanTerm) / \
+            (math.pow(1.0 + self.monthlyInterestRate, self.loanTerm) - 1)
 
     @property
     def totalInterest(self):
@@ -63,7 +64,8 @@ class MatchingTheRepaymentOfPrincipalAndInterest(LoanCalculator):
     @property
     def monthlyInterest(self):
         return [self.loanAmount * self.monthlyInterestRate *
-                (math.pow(1.0 + self.monthlyInterestRate, self.loanTerm) - math.pow(1.0 + self.monthlyInterestRate, it))
+                (math.pow(1.0 + self.monthlyInterestRate, self.loanTerm) -
+                 math.pow(1.0 + self.monthlyInterestRate, it))
                 / (math.pow(1.0 + self.monthlyInterestRate, self.loanTerm) - 1)
                 for it in
                 range(0, self.loanTerm)]
@@ -110,18 +112,20 @@ class MatchingThePrincipalRepayment(LoanCalculator):
 
 
 if __name__ == '__main__':
-    loan = 780000
-    term = 360
-    rate = 0.05635
+    loan = 100000
+    term = 12
+    rate = 0.057
 
     calA = MatchingTheRepaymentOfPrincipalAndInterest(loan, term, rate)
-    calA.showDetail()
-    # print(calA.monthlyInterest)
-    # print(calA.monthlyPrincipal)
+    # calA.showDetail()
+    print(calA.monthlyInterest)
+    print(calA.monthlyPrincipal)
+    print(calA.monthlyRepayment)
 
     print('-----')
 
     calB = MatchingThePrincipalRepayment(loan, term, rate)
-    calB.showDetail()
-    # print(calB.monthlyInterest)
-    # print(calB.monthlyPrincipal)
+    # calB.showDetail()
+    print(calB.monthlyInterest)
+    print(calB.monthlyPrincipal)
+    print(calB.monthlyRepayment)
