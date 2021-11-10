@@ -1,6 +1,7 @@
 # coding: utf-8
 import math
 import numpy_financial as npf
+import numpy as np
 from abc import abstractmethod
 
 
@@ -132,17 +133,20 @@ if __name__ == '__main__':
     loan = 100000
     term = 12
     rate = 0.0576
+    discountedRate = 0.03
 
     calA = MatchingTheRepaymentOfPrincipalAndInterest(loan, term, rate)
     # calA.showDetail()
-    print(calA.monthlyInterest)
-    print(calA.monthlyPrincipal)
-    print(calA.monthlyRepayment)
+    # print(calA.monthlyInterest)
+    # print(calA.monthlyPrincipal)
+    # print(calA.monthlyRepayment)
     cashFlow = [calA.monthlyRepayment]*12
     cashFlow.insert(0, -loan*1.)
-    print(cashFlow)
+    # print(cashFlow)
     irr = round(npf.irr(cashFlow), 15)
     print(irr)
+    npv = np.round(npf.npv(0.03/12, cashFlow))
+    print(npv)
 
     # print('-----')
 
@@ -152,13 +156,19 @@ if __name__ == '__main__':
     # print(calB.monthlyPrincipal)
     cashFlow = calB.monthlyRepayment
     cashFlow.insert(0, -loan*1.)
-    print(cashFlow)
+    # print(cashFlow)
     irr = round(npf.irr(cashFlow), 15)
     print(irr)
+    npv = np.round(npf.npv(0.03/12, cashFlow))
+    print(npv)
 
     calC = PayInterestFirst(loan, term, rate)
-    print(calC.monthlyRepayment)
+    # print(calC.monthlyRepayment)
     cashFlow = calC.monthlyRepayment
     cashFlow.insert(0, -loan*1.)
     irr = round(npf.irr(cashFlow), 15)
     print(irr)
+
+    npv = np.round(npf.npv(0.03/12, cashFlow))
+    print(npv)
+    
